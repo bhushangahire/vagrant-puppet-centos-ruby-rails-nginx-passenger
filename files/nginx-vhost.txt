@@ -1,0 +1,6 @@
+server {
+    listen 80;
+    server_name app.loc www.app.loc;
+    root /home/vagrant/app/public;
+    passenger_enabled on;
+}
