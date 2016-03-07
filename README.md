@@ -1,5 +1,8 @@
 Vagrant Box (SandBox for Ruby on Rails Development)
-Cent OS
+
+Please install vagrant from : https://www.vagrantup.com/downloads.html
+
+VM OS : Cent OS
 
 Installed:
 - iptables
