@@ -11,3 +11,5 @@ Installed:
 - NodeJS
 - MySQL 5.5
 - Redis
+
+Change MySQL password at manifests > site.pp : line no - 52
