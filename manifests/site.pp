@@ -3,15 +3,15 @@ stage { 'pre': }
 Stage[repo] -> Stage[pre] -> Stage[main]
 
 # Repos
-class { 'epel': 
+class { 'epel':
 	stage => repo,
 }
 
 # Tools
-class { 'concat::setup': 
+class { 'concat::setup':
 	stage => pre
 }
-class { 'wget': 
+class { 'wget':
 	stage => pre
 }
 
@@ -44,6 +44,7 @@ class { 'iptables': }
 class { 'nodejs':
   version => 'stable',
   stage => pre,
+	make_install => false
 }
 
 # MySQL
@@ -66,7 +67,7 @@ package { "ImageMagick":
 }
 
 # Ruby
-$ruby_version = '2.2.0'
+$ruby_version = '2.2.3'
 include rvm
 rvm::system_user { vagrant: ; }
 rvm_system_ruby {
@@ -80,15 +81,15 @@ rvm_gem { "$ruby_version/rails":
     ensure   => 'installed',
     require => [Rvm_system_ruby["ruby-$ruby_version"], Class['rvm']];
 }
-exec { "create-rails-app":
-    user => 'vagrant',
-    command => "/usr/local/rvm/bin/rvm $ruby_version exec rails new app",
-    cwd     => '/home/vagrant',
-    environment => ["HOME=/home/vagrant/"],
-    creates => '/home/vagrant/app',
-    require => Rvm_gem["$ruby_version/rails"],
-	timeout => 0
-}
+#exec { "create-rails-app":
+#    user => 'vagrant',
+#    command => "/usr/local/rvm/bin/rvm $ruby_version exec rails new app",
+#    cwd     => '/home/vagrant',
+#    environment => ["HOME=/home/vagrant/"],
+#    creates => '/home/vagrant/app',
+#    require => Rvm_gem["$ruby_version/rails"],
+#	timeout => 0
+#}
 
 # Nginx + Passenger
 class nginx_passenger {
@@ -106,7 +107,7 @@ class nginx_passenger {
 	    path        => '/usr/bin:/usr/sbin:/bin',
 	    require => [Package['libcurl-devel'], Rvm_gem["$ruby_version/passenger"]],
 		timeout => 0
-	} 
+	}
 	file { "/opt/nginx/sites-enabled":
 		ensure	=> directory,
 		require => Exec["passenger-install-nginx-module"],

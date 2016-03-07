@@ -1,10 +1,11 @@
 Vagrant Box (SandBox for Ruby on Rails Development)
+Cent OS
 
 Installed:
 - iptables
 - nginx
 - passenger
-- Ruby 2.2.0
+- Ruby 2.2.3
 - Rails
 - ImageMagick
 - NodeJS

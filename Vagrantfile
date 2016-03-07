@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+VAGRANTFILE_API_VERSION = '2'.freeze
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -10,9 +10,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "centos65-32"
-  config.vm.box_url = "https://dl.dropbox.com/s/3fgr7lbvcpn51py/centos_6-5_i386.box"
-  config.vm.hostname = "railsbox"
+  config.vm.box = 'spantree/Centos-6.5_x86-64'
+  config.vm.hostname = 'railsbox'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,12 +21,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8080
-  config.vm.network "forwarded_port", guest: 3000, host: 3000
+  config.vm.network 'forwarded_port', guest: 80, host: 8080
+  config.vm.network 'forwarded_port', guest: 3000, host: 3000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network 'private_network', ip: '33.33.33.33'
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -45,11 +44,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   # config.vm.synced_folder "./shared/www", "/www", :mount_options => ["dmode=777", "fmode=777"]
   # config.vm.synced_folder "./shared/logs", "/logs", :mount_options => ["dmode=777", "fmode=777"]
-
+  # Uncomment Type NFS for windows
+  config.vm.synced_folder '.', '/vagrant' # , type: 'nfs'
+  # This will be your local project folder
+  config.vm.synced_folder '/Users/bahire/Documents/NetbeansProjects', '/var/www', create: true # , type: 'nfs'
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
+  config.vm.provider :virtualbox do |vb|
+    # Use VBoxManage to customize the VM. For example to change memory:
+    vb.customize ['modifyvm', :id, '--cpus', 2]
+    vb.customize ['modifyvm', :id, '--memory', 1024]
+
+    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+    vb.customize ['modifyvm', :id, '--natdnsproxy1', 'off']
+    vb.customize ['modifyvm', :id, '--cpuhotplug', 'on']
+    vb.customize ['modifyvm', :id, '--cpuexecutioncap', 85]
+    vb.customize ['modifyvm', :id, '--pae', 'on']
+    vb.customize ['modifyvm', :id, '--ioapic', 'on']
+    vb.customize ['modifyvm', :id, '--acpi', 'off']
+    vb.customize ['modifyvm', :id, '--hwvirtex', 'on']
+    vb.customize ['modifyvm', :id, '--vrde', 'off']
+    vb.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
+  end
   # config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
   #   vb.gui = true
@@ -82,10 +100,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # You will need to create the manifests directory and a manifest in
   # the file default.pp in the manifests_path directory.
   #
-  config.vm.provision "puppet" do |puppet|
-     puppet.manifests_path = "manifests"
-     puppet.manifest_file  = "site.pp"
-	 puppet.module_path = "modules"
+  config.vm.provision 'puppet' do |puppet|
+    puppet.manifests_path = 'manifests'
+    puppet.manifest_file = 'site.pp'
+    puppet.module_path = 'modules'
   end
 
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
