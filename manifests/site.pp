@@ -41,11 +41,6 @@ class iptables {
 }
 class { 'iptables': }
 
-class { 'nodejs':
-  version => 'stable',
-  stage => pre,
-	make_install => false
-}
 
 # MySQL
 class { '::mysql::server':
